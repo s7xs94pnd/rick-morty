@@ -1,7 +1,7 @@
-package com.example.rickmorty.data.repository
+package com.example.rickmorty.data.remote.repository
 
-import com.example.rickmorty.data.api.EpisodesApiService
-import com.example.rickmorty.data.dto.Episode
+import com.example.rickmorty.data.remote.api.EpisodesApiService
+import com.example.rickmorty.data.remote.dto.Episode
 
 class EpisodesRepository(private val apiService: EpisodesApiService) {
     suspend fun fetchAllEpisodes(): List<Episode>? {
@@ -12,7 +12,7 @@ class EpisodesRepository(private val apiService: EpisodesApiService) {
         }
     }
 
-    suspend fun fetchEpisodesById(id: Int):Episode?{
+    suspend fun fetchEpisodesById(id: Int): Episode?{
         return if(apiService.fetchEpisodesByID(id).isSuccessful)
             apiService.fetchEpisodesByID(id).body()
         else

@@ -1,7 +1,7 @@
-package com.example.rickmorty.data.repository
+package com.example.rickmorty.data.remote.repository
 
-import com.example.rickmorty.data.api.LocationApiService
-import com.example.rickmorty.data.dto.Location
+import com.example.rickmorty.data.remote.api.LocationApiService
+import com.example.rickmorty.data.remote.dto.Location
 
 class LocationsRepository(private val apiService : LocationApiService) {
    suspend fun fetchAllLocations(): List<Location>? {

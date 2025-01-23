@@ -1,14 +1,19 @@
-package com.example.rickmorty.data.serviseLocator
+package com.example.rickmorty.data.remote.serviseLocator
 
+import android.content.Context
+import androidx.room.Room
 import com.example.rickmorty.BuildConfig
-import com.example.rickmorty.data.api.CharactersApiService
-import com.example.rickmorty.data.api.EpisodesApiService
-import com.example.rickmorty.data.api.LocationApiService
-import com.example.rickmorty.data.repository.CharactersRepository
-import com.example.rickmorty.data.repository.EpisodesRepository
-import com.example.rickmorty.data.repository.LocationsRepository
+import com.example.rickmorty.data.local.dao.AppDatabase
+import com.example.rickmorty.data.local.dao.FavoriteCharacterRepository
+import com.example.rickmorty.data.remote.api.CharactersApiService
+import com.example.rickmorty.data.remote.api.EpisodesApiService
+import com.example.rickmorty.data.remote.api.LocationApiService
+import com.example.rickmorty.data.remote.repository.CharactersRepository
+import com.example.rickmorty.data.remote.repository.EpisodesRepository
+import com.example.rickmorty.data.remote.repository.LocationsRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -25,6 +30,14 @@ val dataModule = module {
     single { CharactersRepository(get()) }
     single { EpisodesRepository(get()) }
     single { LocationsRepository(get()) }
+
+
+    single { provideAppDatabase(androidApplication().applicationContext) }
+
+    single { get<AppDatabase>().favoriteCharacterDao() }
+
+    single { FavoriteCharacterRepository(get()) }
+
 }
 
 fun provideOkhttpClient(): OkHttpClient {
@@ -42,4 +55,12 @@ fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         .addConverterFactory(GsonConverterFactory.create())
         .client(okHttpClient)
         .build()
+}
+
+fun provideAppDatabase(context: Context): AppDatabase {
+    return Room.databaseBuilder(
+        context,
+        AppDatabase::class.java,
+        "rick_morty_database"
+    ).build()
 }

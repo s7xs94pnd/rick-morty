@@ -1,7 +1,7 @@
-package com.example.rickmorty.data.repository
+package com.example.rickmorty.data.remote.repository
 
-import com.example.rickmorty.data.api.CharactersApiService
-import com.example.rickmorty.data.dto.Character
+import com.example.rickmorty.data.remote.api.CharactersApiService
+import com.example.rickmorty.data.remote.dto.Character
 
 class CharactersRepository(private val apiService : CharactersApiService) {
    suspend fun fetchAllCharacters():List<Character>? {
