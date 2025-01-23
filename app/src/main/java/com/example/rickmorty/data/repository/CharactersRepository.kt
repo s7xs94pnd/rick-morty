@@ -1,4 +1,4 @@
-package com.example.rickmorty.data.remote.repository
+package com.example.rickmorty.data.repository
 
 import com.example.rickmorty.data.remote.api.CharactersApiService
 import com.example.rickmorty.data.remote.dto.Character

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -33,6 +34,10 @@ fun EpisodesDetailScreen(id: Int) {
     // TODO:
     val episodesDetailViewModel = koinViewModel<EpisodesDetailViewModel>(parameters = { parametersOf (id)})
     val episode by episodesDetailViewModel.episodeState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        episodesDetailViewModel.fetchEpisodeById()
+    }
 
     if (episode != null){
         Column(

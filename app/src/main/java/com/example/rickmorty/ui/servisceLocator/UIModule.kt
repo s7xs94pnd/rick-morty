@@ -4,13 +4,16 @@ import com.example.rickmorty.ui.screens.characters.CharacterViewModel
 import com.example.rickmorty.ui.screens.characters.detail.CharacterDetailViewModel
 import com.example.rickmorty.ui.screens.episodes.EpisodeViewModel
 import com.example.rickmorty.ui.screens.episodes.detail.EpisodesDetailViewModel
+import com.example.rickmorty.ui.screens.favorite.FavoriteCharacterViewModel
+import com.example.rickmorty.ui.screens.favorite.FavoriteCharactersScreen
 import com.example.rickmorty.ui.screens.locations.LocationViewModel
 import com.example.rickmorty.ui.screens.locations.detail.LocationsDetailViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val uiModule = module {
-    viewModel { CharacterViewModel(get()) }
+
+    viewModel { CharacterViewModel(get(),get()) }
     viewModel { (characterId: Int) ->
         CharacterDetailViewModel(get(), characterId)
     }
@@ -23,4 +26,5 @@ val uiModule = module {
     viewModel { (locationId: Int) ->
         LocationsDetailViewModel(get(), locationId)
     }
+    viewModel { FavoriteCharacterViewModel(get ()) }
 }

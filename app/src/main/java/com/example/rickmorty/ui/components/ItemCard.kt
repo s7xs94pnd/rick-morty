@@ -32,11 +32,10 @@ fun ItemCard(
 ) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
             .clickable { onItemClick() }
             .padding(4.dp),
         shape = RoundedCornerShape(12.dp),
-        colors = cardColors(containerColor = Color.White)
+        colors = cardColors(containerColor = Color.Gray)
     ) {
         Row(
             modifier = Modifier.padding(8.dp),

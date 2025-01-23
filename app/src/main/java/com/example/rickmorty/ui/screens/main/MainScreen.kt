@@ -29,6 +29,7 @@ import com.example.rickmorty.ui.screens.characters.CharactersScreen
 import com.example.rickmorty.ui.screens.characters.detail.CharactersDetailScreen
 import com.example.rickmorty.ui.screens.episodes.EpisodeScreen
 import com.example.rickmorty.ui.screens.episodes.detail.EpisodesDetailScreen
+import com.example.rickmorty.ui.screens.favorite.FavoriteCharactersScreen
 import com.example.rickmorty.ui.screens.locations.LocationScreen
 import com.example.rickmorty.ui.screens.locations.detail.LocationsDetailScreen
 
@@ -174,6 +175,12 @@ fun NavHostInit(navController: NavHostController) {
         composable(NavRoute.LocationsDetail) {
             val id = it.arguments?.getString("id")?.toInt() ?: 0
             LocationsDetailScreen(id)
+        }
+
+        composable(NavRoute.Favorites) {
+            FavoriteCharactersScreen(
+
+            )
         }
     }
 }
