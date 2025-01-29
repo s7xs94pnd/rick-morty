@@ -7,8 +7,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.rickmorty.data.remote.dto.Character
 import com.example.rickmorty.ui.components.ItemCard
 import com.example.rickmorty.ui.components.ItemList
@@ -20,16 +19,19 @@ fun CharactersScreen(
     navigate: (Int) -> Unit,
     characterViewModel: CharacterViewModel = koinViewModel<CharacterViewModel>()
 ) {
+
     LaunchedEffect(Unit) {
         characterViewModel.fetchAllCharacters()
     }
-    val characters by characterViewModel.charactersState.collectAsState()
+
+    val pagingData = characterViewModel.charactersState.collectAsLazyPagingItems()
+
     ItemList(
-        items = characters,
+        pagingData = pagingData,
         onItemClick = navigate,
         itemContent = { character, onItemClick ->
             CharacterItem(
-                character = character as Character,
+                character = character,
                 navigate = onItemClick,
                 onFavoriteClick = { characterViewModel.addToFavorites(it) }
             )

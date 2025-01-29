@@ -3,6 +3,8 @@ package com.example.rickmorty.data.remote.dto
 import com.google.gson.annotations.SerializedName
 
 data class LocationsResultResponse(
+    @SerializedName("info")
+    val pageInfo: PagingInfo,
     @SerializedName("results")
     val locationResponseList:List<Location>
 )

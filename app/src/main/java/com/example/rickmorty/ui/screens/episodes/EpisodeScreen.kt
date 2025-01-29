@@ -2,8 +2,7 @@ package com.example.rickmorty.ui.screens.episodes
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.rickmorty.data.remote.dto.Episode
 import com.example.rickmorty.ui.components.ItemCard
 import com.example.rickmorty.ui.components.ItemList
@@ -17,13 +16,14 @@ fun EpisodeScreen(
     LaunchedEffect(Unit) {
         episodeViewModel.fetchAllEpisodes()
     }
+    val pagingData = episodeViewModel.episodeFlow.collectAsLazyPagingItems()
 
-    val episodesState by episodeViewModel.episodesState.collectAsState()
-    ItemList(items = episodesState,
+    ItemList(
+        pagingData = pagingData,
         onItemClick = navigate,
         itemContent = { episode, onItemClick ->
             EpisodeItem(
-                episode = episode as Episode,
+                episode = episode,
                 navigate = onItemClick
             )
         }

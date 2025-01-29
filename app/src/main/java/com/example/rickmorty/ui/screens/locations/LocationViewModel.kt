@@ -3,26 +3,35 @@ package com.example.rickmorty.ui.screens.locations
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import com.example.rickmorty.data.remote.dto.Location
 import com.example.rickmorty.data.repository.LocationsRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class LocationViewModel(private val locationsRepository: LocationsRepository) : ViewModel() {
 
-    private val _locationState = MutableStateFlow<List<Location>>(emptyList())
-    val locationState: StateFlow<List<Location>> = _locationState.asStateFlow()
+    private val _locationState = MutableSharedFlow<PagingData<Location>>()
+    val locationState: SharedFlow<PagingData<Location>> = _locationState.asSharedFlow()
 
-     fun fetchAllLocation() {
+    fun fetchAllLocation() {
         viewModelScope.launch(Dispatchers.IO) {
             val location = locationsRepository.fetchAllLocations()
             if (location != null) {
-                _locationState.value = location
+                locationsRepository.fetchAllLocations()
+                    .flow
+                    .collectLatest {pagingData->
+                        _locationState.emit( pagingData)
+                    }
             } else {
-                Log.e("locationViewModel", "Failed to fetch locations")
+                Log.e("TAG", "Failed to fetch characters")
             }
         }
     }
