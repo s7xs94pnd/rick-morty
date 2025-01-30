@@ -1,6 +1,5 @@
 package com.example.rickmorty.ui.screens.episodes
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -20,16 +19,11 @@ class EpisodeViewModel(private val episodesRepository: EpisodesRepository) : Vie
 
     fun fetchAllEpisodes() {
         viewModelScope.launch(Dispatchers.IO) {
-            val episodes = episodesRepository.fetchAllEpisodes()
-            if (episodes != null) {
                 episodesRepository.fetchAllEpisodes()
                     .flow
-                    .collectLatest {pagingData->
-                        _episodeFlow.emit( pagingData)
+                    .collectLatest { pagingData ->
+                        _episodeFlow.emit(pagingData)
                     }
-            } else {
-                Log.e("TAG", "Failed to fetch characters")
-            }
         }
     }
 }

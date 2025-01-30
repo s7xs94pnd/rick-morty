@@ -23,16 +23,11 @@ class LocationViewModel(private val locationsRepository: LocationsRepository) : 
 
     fun fetchAllLocation() {
         viewModelScope.launch(Dispatchers.IO) {
-            val location = locationsRepository.fetchAllLocations()
-            if (location != null) {
                 locationsRepository.fetchAllLocations()
                     .flow
                     .collectLatest {pagingData->
                         _locationState.emit( pagingData)
                     }
-            } else {
-                Log.e("TAG", "Failed to fetch characters")
-            }
         }
     }
 }

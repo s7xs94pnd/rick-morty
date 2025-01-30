@@ -47,6 +47,8 @@ android {
 
 
 dependencies {
+
+    implementation (libs.androidx.material)
     implementation (libs.androidx.paging.compose)
     implementation (libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
