@@ -1,15 +1,23 @@
 package com.example.rickmorty.data.repository
 
-import com.example.rickmorty.data.api.CharactersApiService
-import com.example.rickmorty.data.dto.Character
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import com.example.rickmorty.data.remote.api.CharactersApiService
+import com.example.rickmorty.data.remote.dto.Character
+import com.example.rickmorty.data.remote.paging.CharacterPagingSource
 
-class CharactersRepository(private val apiService : CharactersApiService) {
-   suspend fun fetchAllCharacters():List<Character>? {
-        return if(apiService.fetchAllCharacters().isSuccessful){
-            apiService.fetchAllCharacters().body()?.charactersResponseList
-        }else{
-            emptyList()
-        }
+class CharactersRepository(private val apiService: CharactersApiService) {
+    fun fetchAllCharacters(): Pager<Int, Character> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                prefetchDistance = 10,
+                initialLoadSize = 20
+            ),
+            pagingSourceFactory = {
+                CharacterPagingSource(apiService)
+            }
+        )
     }
 
     suspend fun fetchCharacterById(id: Int): Character? {

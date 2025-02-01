@@ -1,9 +1,11 @@
 package com.example.rickmorty.ui.nav
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.PlayArrow
@@ -30,6 +32,13 @@ val bottomNavListOf = listOf(
         selectedIcon = Icons.Filled.LocationOn,
         unselectedIcon = Icons.Outlined.LocationOn,
         badges = 3
+    ) ,
+    BottomNavItem(
+        title = "Favorites",
+        route = NavRoute.Favorites,
+        selectedIcon = Icons.Filled.FavoriteBorder,
+        unselectedIcon = Icons.Outlined.FavoriteBorder,
+        badges = 0
     )
 )
 

@@ -8,76 +8,111 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
 import com.example.rickmorty.ui.components.ProgressBar
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 @Composable
-fun LocationsDetailScreen(id: Int) {
-    val locationDetailViewModel = koinViewModel<LocationsDetailViewModel>( parameters = { parametersOf(id) })
+fun LocationsDetailScreen(id: Int, navController: NavHostController) {
+    val locationDetailViewModel = koinViewModel<LocationsDetailViewModel>(parameters = { parametersOf(id) })
     val location by locationDetailViewModel.locationState.collectAsState()
 
-    if (location != null){
+    LaunchedEffect(Unit) {
+        locationDetailViewModel.fetchLocationById()
+    }
+
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        fontSize = 26.sp,
+                        text = location?.name ?: "Unknown",
+                        fontStyle = FontStyle.Italic
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = {navController.popBackStack() }) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color.LightGray
+                )
+            )
+        }
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(it),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            AsyncImage(
-                model = location!!.url,
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(250.dp)
-                    .clip(RoundedCornerShape(16.dp)),
-                contentScale = ContentScale.Fit
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+            if (location != null) {
+                AsyncImage(
+                    model = location!!.url,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(250.dp)
+                        .clip(RoundedCornerShape(16.dp)),
+                    contentScale = ContentScale.Fit
+                )
+                Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
-                text = location!!.name,
-                textAlign = TextAlign.Center,
-                fontSize = 32.sp,
-                fontStyle = FontStyle.Normal,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
+                Text(
+                    text = location!!.name,
+                    textAlign = TextAlign.Center,
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
 
+                Text(
+                    text = "ID: " + location!!.id.toString(),
+                    textAlign = TextAlign.Center,
+                    fontSize = 16.sp,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
 
-            Text(
-                text = "ID: "+location!!.id.toString(),
-                textAlign = TextAlign.Center,
-                fontSize = 16.sp,
-                fontStyle = FontStyle.Normal,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-            Text(
-
-                text = "type: "+location!!.type,
-                textAlign = TextAlign.Center,
-                fontSize = 16.sp,
-                fontStyle = FontStyle.Normal,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
+                Text(
+                    text = "Type: " + location!!.type,
+                    textAlign = TextAlign.Center,
+                    fontSize = 16.sp,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+            } else {
+                ProgressBar()
+            }
         }
-    }else{
-        ProgressBar()
     }
 }

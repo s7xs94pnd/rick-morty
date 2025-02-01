@@ -1,8 +1,10 @@
-package com.example.rickmorty.data.dto
+package com.example.rickmorty.data.remote.dto
 
 import com.google.gson.annotations.SerializedName
 
 data class EpisodesResultResponse(
+    @SerializedName("info")
+    val pageInfo: PagingInfo,
     @SerializedName("results")
     val episodesResponseList:List<Episode>
 )

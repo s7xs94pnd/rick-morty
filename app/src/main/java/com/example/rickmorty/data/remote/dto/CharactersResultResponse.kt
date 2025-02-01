@@ -1,28 +1,32 @@
-package com.example.rickmorty.data.dto
+package com.example.rickmorty.data.remote.dto
 
 import com.google.gson.annotations.SerializedName
 
 data class CharactersResultResponse(
+    @SerializedName("info")
+    val pageInfo: PagingInfo,
     @SerializedName("results")
-    val charactersResponseList:List<Character>
+    val charactersResponseList: List<Character>
 )
 
-data class Character (
+data class Character(
     @SerializedName("id")
-    val id : Int,
+    val id: Int,
     @SerializedName("name")
-    val name : String,
+    val name: String,
     @SerializedName("status")
-    val status : String,
+    val status: String,
     @SerializedName("species")
-    val species : String,
+    val species: String,
     @SerializedName("type")
-    val type : String,
+    val type: String,
     @SerializedName("gender")
-    val gender : String,
+    val gender: String,
     @SerializedName("location")
-    val location : Location,
+    val location: Location,
     @SerializedName("image")
-    val image : String
+    val image: String
 )
+
+
 

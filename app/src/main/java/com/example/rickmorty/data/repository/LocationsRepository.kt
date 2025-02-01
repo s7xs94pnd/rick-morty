@@ -1,15 +1,24 @@
 package com.example.rickmorty.data.repository
 
-import com.example.rickmorty.data.api.LocationApiService
-import com.example.rickmorty.data.dto.Location
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import com.example.rickmorty.data.remote.api.LocationApiService
+import com.example.rickmorty.data.remote.dto.Location
+import com.example.rickmorty.data.remote.paging.EpisodePagingSource
+import com.example.rickmorty.data.remote.paging.LocationPagingSource
 
 class LocationsRepository(private val apiService : LocationApiService) {
-   suspend fun fetchAllLocations(): List<Location>? {
-        return if(apiService.fetchAllLocations().isSuccessful){
-            apiService.fetchAllLocations().body()?.locationResponseList
-        }else{
-            emptyList()
-        }
+    fun fetchAllLocations(): Pager<Int,Location> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                prefetchDistance = 10,
+                initialLoadSize = 100
+            ),
+            pagingSourceFactory = {
+                LocationPagingSource(apiService)
+            }
+        )
     }
 
     suspend fun fetchLocationById(id: Int): Location? {

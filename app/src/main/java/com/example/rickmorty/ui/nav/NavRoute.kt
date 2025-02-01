@@ -8,4 +8,5 @@ object NavRoute {
     const val EpisodesDetail = "episodes/{id}"
     const val Locations = "location"
     const val LocationsDetail = "location/{id}"
+    const val Favorites = "favorites"
 }
