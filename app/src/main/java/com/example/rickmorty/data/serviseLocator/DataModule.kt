@@ -19,19 +19,30 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-val dataModule = module {
+val networkModule = module {
     single { provideOkhttpClient() }
     single { provideRetrofit(get()) }
     single { get<Retrofit>().create(CharactersApiService::class.java) }
     single { get<Retrofit>().create(EpisodesApiService::class.java) }
     single { get<Retrofit>().create(LocationApiService::class.java) }
+}
+
+val databaseModule = module {
+    single { provideAppDatabase(androidApplication().applicationContext) }
+    single { get<AppDatabase>().favoriteCharacterDao() }
+}
+
+val repositoryModule = module {
     single { CharactersRepository(get()) }
     single { EpisodesRepository(get()) }
     single { LocationsRepository(get()) }
-    single { provideAppDatabase(androidApplication().applicationContext) }
-    single { get<AppDatabase>().favoriteCharacterDao() }
     single { FavoriteCharacterRepository(get()) }
 }
+
+val dataModule = module {
+    includes(networkModule, databaseModule, repositoryModule)
+}
+
 
 fun provideOkhttpClient(): OkHttpClient {
     return OkHttpClient.Builder()

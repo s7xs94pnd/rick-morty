@@ -27,6 +27,3 @@ data class Character(
     @SerializedName("image")
     val image: String
 )
-
-
-

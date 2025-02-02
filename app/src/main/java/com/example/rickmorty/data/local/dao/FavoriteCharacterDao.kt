@@ -10,12 +10,22 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FavoriteCharacterDao {
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavoriteCharacter(character: FavoriteCharacter)
 
     @Delete
     suspend fun deleteFavoriteCharacter(character: FavoriteCharacter)
 
+    @Query("DELETE FROM favorite_characters WHERE id = :characterId")
+    suspend fun deleteFavoriteCharacterById(characterId: Int)
+
     @Query("SELECT * FROM favorite_characters")
     fun getAllFavoriteCharacters(): Flow<List<FavoriteCharacter>>
+
+    @Query("SELECT * FROM favorite_characters WHERE id = :characterId")
+    suspend fun getFavoriteCharacterById(characterId: Int): FavoriteCharacter?
+
+    @Query("SELECT EXISTS(SELECT * FROM favorite_characters WHERE id = :characterId)")
+    suspend fun isCharacterFavorite(characterId: Int): Boolean
 }
