@@ -4,7 +4,6 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.example.rickmorty.data.remote.api.LocationApiService
 import com.example.rickmorty.data.remote.dto.Location
-import com.example.rickmorty.data.remote.paging.EpisodePagingSource
 import com.example.rickmorty.data.remote.paging.LocationPagingSource
 
 class LocationsRepository(private val apiService : LocationApiService) {
@@ -22,7 +21,7 @@ class LocationsRepository(private val apiService : LocationApiService) {
     }
 
     suspend fun fetchLocationById(id: Int): Location? {
-        val response = apiService.fetchLocationsByID(id)
+        val response = apiService.fetchLocationByID(id)
         return if (response.isSuccessful) {
             response.body()
         } else {

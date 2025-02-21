@@ -4,7 +4,6 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.example.rickmorty.data.remote.api.EpisodesApiService
 import com.example.rickmorty.data.remote.dto.Episode
-import com.example.rickmorty.data.remote.paging.CharacterPagingSource
 import com.example.rickmorty.data.remote.paging.EpisodePagingSource
 
 class EpisodesRepository(private val apiService: EpisodesApiService) {
@@ -22,10 +21,9 @@ class EpisodesRepository(private val apiService: EpisodesApiService) {
     }
 
     suspend fun fetchEpisodesById(id: Int): Episode? {
-        return if (apiService.fetchEpisodesByID(id).isSuccessful)
-            apiService.fetchEpisodesByID(id).body()
+        return if (apiService.fetchEpisodeByID(id).isSuccessful)
+            apiService.fetchEpisodeByID(id).body()
         else
             null
     }
 }
-

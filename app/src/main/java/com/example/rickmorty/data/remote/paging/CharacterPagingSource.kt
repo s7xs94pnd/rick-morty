@@ -19,19 +19,22 @@ class CharacterPagingSource(
         return try {
             val response = apiService.fetchAllCharacters(currentPage)
             if (!response.isSuccessful) {
+                Log.e("CharacterPagingSource", "HTTP error: ${response.code()} - ${response.message()}")
                 return LoadResult.Error(HttpException(response))
             }
 
             val responseBody = response.body()
             if (responseBody == null) {
+                Log.e("CharacterPagingSource", "Response body is null")
                 return LoadResult.Error(NullPointerException("Response body is null"))
             }
 
             val nextPageUrl = responseBody.pageInfo.nextPage
             val nextPage = nextPageUrl?.toUri()?.getQueryParameter("page")?.toIntOrNull()
 
+            Log.d("CharacterPagingSource", "Loaded page $currentPage successfully")
             LoadResult.Page(
-                data = responseBody.charactersResponseList ,
+                data = responseBody.charactersResponseList,
                 prevKey = if (currentPage == 1) null else currentPage - 1,
                 nextKey = nextPage
             )
